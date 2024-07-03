@@ -44,9 +44,6 @@ class Nbody{
 
             return {fx,fy};
 
-
-
-
         }
         double node_check(Node node){
             double s,d;
@@ -55,8 +52,8 @@ class Nbody{
             return (s / d);
         }
         void update_position(){
-            
-
+            x += xv * dt;
+            y += yv * dt;
         }
 
 
