@@ -7,23 +7,23 @@
 class quadTree
 {
 private:
-    area Area;
+    Area area;
     Node* root;
     int max_depth = 128;
     const int offset = 5;
     
 public:
-    quadTree(area a, int depth = 128) : Area(a), max_depth(depth){
-        root = new Node(Area.min_x, Area.min_y, Area.max_x, Area.max_y);
+    quadTree(Area a, int depth = 128) : area(a), max_depth(depth){
+        root = new Node(area.min_x, area.min_y, area.max_x, area.max_y);
     }
 
     bool check_in_range(const Nbody& body){
-        return(Area.min_x < body.x && body.x < Area.max_x && Area.min_y < body.y && body.y < Area.max_y);
+        return(area.min_x < body.x && body.x < area.max_x && area.min_y < body.y && body.y < area.max_y);
     }
     
-    int get_quadrant(const Nbody& body, const area& Area){
-        double mid_x = (Area.min_x + Area.max_x) / 2;
-        double mid_y = (Area.min_y + Area.max_y) / 2;
+    int get_quadrant(const Nbody& body, const Area& area){
+        double mid_x = (area.min_x + area.max_x) / 2;
+        double mid_y = (area.min_y + area.max_y) / 2;
         if (body.x < mid_x){
             if (body.y < mid_y){
                 return 2; // botom left
@@ -49,7 +49,7 @@ public:
             std::cerr << "Max Depth Reached at (" << body->x << ", " << body->y << ") in node (" << node->x << ", " << node->y << ")\n";
             return;
         }
-        int quadrant = get_quadrant(*body, area(node->min_x, node->min_y, node->max_x, node->max_y));
+        int quadrant = get_quadrant(*body, Area(node->min_x, node->min_y, node->max_x, node->max_y));
 
         if (node->children[quadrant] != nullptr) {
             if (Nbody* existingBody = dynamic_cast<Nbody*>(node->children[quadrant])) {
