@@ -2,8 +2,6 @@
 #include "area.cpp"
 
 class Node {
-private:
-    int depth = 0;
 public:
     Node* children[4];
     int min_x, min_y, max_x, max_y;
@@ -12,7 +10,7 @@ public:
 
     int x,y,mass;
 
-    Node(int Min_x, int Min_y, int Max_x, int Max_y, int Depth){ 
+    Node(int Min_x, int Min_y, int Max_x, int Max_y, int Depth=0){ 
         //: min_x(Min_x), min_y(Min_y), max_x(Max_x), max_y(Max_y), Area(Min_x, Min_y, Max_x, Max_y) {
         area = Area(min_x,min_y,max_x,max_y);
         depth = Depth;
