@@ -7,6 +7,7 @@ public:
     int min_x, min_y, max_x, max_y;
     Area childArea; 
     Area area;
+    int depth;
 
     int x,y,mass;
 
