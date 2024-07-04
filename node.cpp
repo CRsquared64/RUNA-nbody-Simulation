@@ -16,7 +16,7 @@ public:
             children[i] = nullptr;
         }
     }
-
+    virtual ~Node() {}
     void update_child_area(){
         int count = 0;
         int total_mass = 0;

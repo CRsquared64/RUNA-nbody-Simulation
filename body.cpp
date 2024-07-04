@@ -28,6 +28,7 @@ class Nbody{
             this->y = y;
 
         }
+        virtual ~Body() {}
 
         tuple<double, double> force(Nbody other){
             double obj_dist_x, obj_dist_y, dist, force, angle, fx,fy;
