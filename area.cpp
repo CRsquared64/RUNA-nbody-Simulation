@@ -1,3 +1,5 @@
+#ifndef AREA_H
+#define AREA_H
 class Area{
     public:
     int min_x,min_y,max_x,max_y;
@@ -6,3 +8,5 @@ class Area{
     }
 
 };
+
+#endif

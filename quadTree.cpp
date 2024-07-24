@@ -16,6 +16,7 @@ public:
     quadTree(Area a, int depth = 128) : area(a), max_depth(depth){
         root = new Node(area.min_x, area.min_y, area.max_x, area.max_y);
     }
+    
 
     bool check_in_range(const Nbody& body){
         return(area.min_x < body.x && body.x < area.max_x && area.min_y < body.y && body.y < area.max_y);
