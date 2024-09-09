@@ -17,10 +17,16 @@ public:
     double y = 0;
     double mass = 0;
 
+    double min_x, min_y, max_x, max_y;
+
 
     Node(double min_x, double min_y, double max_x, double max_y, int depth)
         : area(min_x, min_y, max_x, max_y), depth(depth)
     {
+        this->min_x = min_x;
+        this->min_y = min_y;
+        this->max_x = max_x;
+        this->max_y = max_y;
         childrenArray.fill(std::nullopt); // fill it with NOTHING
     }
     

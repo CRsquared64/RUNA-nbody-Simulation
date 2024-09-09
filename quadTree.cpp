@@ -62,5 +62,12 @@ class QuadTree
 
 
         }
+        void subdivide(Node node, int quadrant)
+        {
+            float mid_x = (node.min_x)
+        }
+    
+
+        
 
 };
