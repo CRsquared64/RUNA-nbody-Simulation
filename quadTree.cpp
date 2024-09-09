@@ -18,4 +18,18 @@ class QuadTree
            
             
         }
+        bool check_in_range(Nbody body)
+        {
+            if (area.min_x < body.x <= area.max_x)
+            {
+                if (area.min_y <= body.y < area.max_y)
+                {
+                    return true;
+                }
+                else
+                {return false;}
+            }
+            else
+            {return false;}
+        }
 };
