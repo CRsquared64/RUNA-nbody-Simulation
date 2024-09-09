@@ -18,7 +18,7 @@ class QuadTree
            
             
         }
-        bool check_in_range(Nbody body)
+         bool check_in_range(Nbody body)
         {
             if (area.min_x < body.x <= area.max_x)
             {
@@ -32,4 +32,35 @@ class QuadTree
             else
             {return false;}
         }
+        int get_quadrant(Nbody body, Area area)
+        {
+            float mid_x = (area.min_x + area.max_x) / 2;
+            float mid_y = (area.min_y + area.max_y) / 2;
+            
+            if (body.x < mid_x)
+            {
+                if (body.y < mid_y)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                if (body.y < mid_y)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+
+
+        }
+
 };
