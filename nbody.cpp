@@ -40,7 +40,7 @@ public:
 		this->zv = zv;
 	}
 	Nbody() : x(0), y(0), z(0), mass(0), xv(0), yv(0), zv(0) {};
-		
+	
 
 
 public:

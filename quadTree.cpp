@@ -64,7 +64,13 @@ class QuadTree
         }
         void subdivide(Node node, int quadrant)
         {
-            float mid_x = (node.min_x)
+            float mid_x = (node.min_x + node.max_x) / 2;
+            float mid_y = (node.min_y + node.max_y) / 2;
+            switch(quadrant)
+            {
+                case 0:
+                    std::visit
+            }
         }
     
 

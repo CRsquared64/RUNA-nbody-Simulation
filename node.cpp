@@ -35,6 +35,13 @@ public:
     {
         childrenArray.fill(std::nullopt);
     }
+    void insert_child(int index, ChildrenVariant child)
+    {
+        if (index >= 0 && index < 4) {
+            childrenArray[index] = std::move(child);
+        }
+    }
+
 
     void update_mass()
     {
