@@ -18,20 +18,12 @@ class QuadTree
            
             
         }
-         bool check_in_range(Nbody body)
+        bool check_in_range(const Nbody& body) const 
         {
-            if (area.min_x < body.x <= area.max_x)
-            {
-                if (area.min_y <= body.y < area.max_y)
-                {
-                    return true;
-                }
-                else
-                {return false;}
-            }
-            else
-            {return false;}
+            return (body.x >= area.min_x && body.x <= area.max_x) &&
+                (body.y >= area.min_y && body.y <= area.max_y);
         }
+
         int get_quadrant(Nbody body, Area area)
         {
             float mid_x = (area.min_x + area.max_x) / 2;
@@ -62,18 +54,36 @@ class QuadTree
 
 
         }
-        void subdivide(Node node, int quadrant)
-        {
+        void subdivide(Node& node, int quadrant) {
             float mid_x = (node.min_x + node.max_x) / 2;
             float mid_y = (node.min_y + node.max_y) / 2;
-            switch(quadrant)
-            {
-                case 0:
-                    std::visit
+
+            switch (quadrant) {
+                case 0: {
+                    auto insertNode = std::make_unique<Node>(node.min_x, mid_y, mid_x, node.max_y, node.depth + 1);
+                    node.insertAt(0, std::move(insertNode));
+                    break;
+                }
+                case 1: {
+                    auto insertNode = std::make_unique<Node>(mid_x, mid_y, node.max_x, node.max_y, node.depth + 1);
+                    node.insertAt(1, std::move(insertNode));
+                    break;
+                }
+                case 2: {
+                    auto insertNode = std::make_unique<Node>(node.min_x, node.min_y, mid_x, mid_y, node.depth + 1);
+                    node.insertAt(2, std::move(insertNode));
+                    break;
+                }
+                case 3: {
+                    auto insertNode = std::make_unique<Node>(mid_x, node.min_y, node.max_x, mid_y, node.depth + 1);
+                    node.insertAt(3, std::move(insertNode));
+                    break;
+                }
+                default:
+                    std::cerr << "Invalid quadrant: " << quadrant << std::endl;
+                    break;
             }
         }
-    
+                
 
-        
-
-};
+    };

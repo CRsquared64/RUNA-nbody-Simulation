@@ -5,13 +5,27 @@
 #include "nbody.cpp"
 #include "area.cpp"
 
+class Blank {
+public:
+    Blank() : name("Unknown") {}
+    Blank(const std::string& n) : name(n) {}
+
+    void print() const {
+        std::cout << "Blank: " << name << std::endl;
+    }
+
+private:
+    std::string name;
+};
 class Node
 {
 public:
     Area area;
     int depth;
-    using ChildrenVariant = std::variant<Nbody, Node>; // holds objects
-    std::array<std::optional<ChildrenVariant>, 4> childrenArray;  // Use std::optional to delay initialization
+    using NodeContent = std::variant<Nbody, Blank, std::unique_ptr<Node>>;
+
+    // Array to hold exactly 4 NBody or Node objects
+    std::array<NodeContent, 4> contents;
 
     double x = 0;
     double y = 0;
@@ -27,22 +41,23 @@ public:
         this->min_y = min_y;
         this->max_x = max_x;
         this->max_y = max_y;
-        childrenArray.fill(std::nullopt); // fill it with NOTHING
+         // fill it with NOTHING
     }
     
 
     Node() : area(0, 0, 0, 0), depth(0)
     {
-        childrenArray.fill(std::nullopt);
-    }
-    void insert_child(int index, ChildrenVariant child)
-    {
-        if (index >= 0 && index < 4) {
-            childrenArray[index] = std::move(child);
+        for (auto& item : contents) {
+            item = Blank();  // All array elements are initially Blank
         }
     }
-
-
+    void insertAt(size_t index, NodeContent content) {
+        if (index < contents.size()) {
+            contents[index] = std::move(content);  // Use move assignment
+        } else {
+            std::cerr << "Error: Index out of bounds." << std::endl;
+        }
+    }
     void update_mass()
     {
         int count = 0;
@@ -50,20 +65,21 @@ public:
         double xTemp = 0.0;
         double yTemp = 0.0;
 
-        for (auto &child : childrenArray)
-        {
-            if (child)
-            {
-                std::visit([&](auto &childObj)
-                {
-                    xTemp+= childObj.x;
-                    yTemp += childObj.y;
-
-                    massTemp += childObj.mass;
+        for (const auto& childObj : contents) {
+            std::visit([&](auto&& obj) {
+                using T = std::decay_t<decltype(obj)>;
+                if constexpr (std::is_same_v<T, Nbody>) {
+                    xTemp += obj.x;
+                    yTemp += obj.y;
+                    massTemp += obj.mass;
                     count++;
-                }, *child);
-
-            }
+                } else if constexpr (std::is_same_v<T, Node>) { // Update the mass of the child node first
+                    xTemp += obj.x;
+                    yTemp += obj.y;
+                    massTemp += obj.mass;
+                    count++;
+                }
+            }, childObj);
         }
         if (count != 0)
         {
