@@ -52,8 +52,54 @@ class QuadTree
                 }
             }
 
-
+        
         }
+        void insert(const Nbody& body, Node& node, int depth = 0)
+        {
+            if (depth == max_depth)
+            {
+                std::cerr << "Max Depth Reached" << std::endl;
+                return;
+            }
+
+            int quadrant = get_quadrant(body, Area(node.min_x, node.min_y, node.max_x, node.max_y));
+
+            if (std::holds_alternative<Nbody>(node.contents[quadrant]))
+            {
+                Nbody existing_body = std::get<Nbody>(node.contents[quadrant]);
+                if (existing_body.x == body.x && existing_body.y == body.y)
+                {
+                    // Offset the new body to avoid collision.
+                    // Note: Ensure body is mutable if you use const_cast
+                    const_cast<Nbody&>(body).x += 5;
+                }
+
+                // Subdivide the node and reinsert the existing body and the new body.
+                std::array<Node::NodeContent, 4> temp_contents = std::move(node.contents); // Use move semantics
+                node.contents.fill(Blank()); // Clear current contents.
+                subdivide(node, quadrant); // Subdivide the node.
+
+                for (auto& content : temp_contents)
+                {
+                    if (std::holds_alternative<Nbody>(content))
+                    {
+                        insert(std::get<Nbody>(content), *std::get<std::unique_ptr<Node>>(node.contents[quadrant]), depth + 1);
+                    }
+                }
+
+                insert(body, *std::get<std::unique_ptr<Node>>(node.contents[quadrant]), depth + 1);
+            }
+            else if (std::holds_alternative<std::unique_ptr<Node>>(node.contents[quadrant]))
+            {
+                insert(body, *std::get<std::unique_ptr<Node>>(node.contents[quadrant]), depth + 1);
+            }
+            else
+            {
+                node.contents[quadrant] = body;
+            }
+        }
+
+
         void subdivide(Node& node, int quadrant) {
             float mid_x = (node.min_x + node.max_x) / 2;
             float mid_y = (node.min_y + node.max_y) / 2;
